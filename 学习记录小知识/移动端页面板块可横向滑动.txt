@@ -1,0 +1,27 @@
+ul.pinxiang-list{
+        padding:10px;
+        padding-top:0;
+        padding-bottom:20px;
+        width:100%;
+        box-sizing:border-box;
+        overflow-x:scroll;
+        overflow-y:hidden;
+        white-space: nowrap;
+        float:left;
+｝
+ul.pinxiang-list li{
+        position:relative;
+        display:inline-block;
+        margin-right:5px;
+ ｝
+
+
+这里最主要的就是要设置ul的宽度是100%，并且向左浮动。li要设置为display:inline-block.
+
+还有一个就是，如果你用谷歌调试的时候，会发现出现一个明显的滚动条。但是如果你用真机，也就是用移动设备看的时候，你会发现其实滚动条是不会出现的。
+
+
+另外要注意一个问题，由于li被display:inline-block.那么就有了inline的属性，默认。此元素会被显示为内联元素，元素前后没有换行符。并且，该属性定义行内元素的基线相对于该元素所在行的基线的垂直对齐。什么意思呢，简单来说就是这些li的对齐基线的默认方式是以最后一行的文字对齐的。
+
+最后一个li由于没有图片撑起来，而它们的默认方式又是以最后一行文字为基准的，所以最后一个li就“掉”了下来。这个时候，我们就需要设置一下vertical-align这个属性的值了。设置为：vertical-align:middle。
+
