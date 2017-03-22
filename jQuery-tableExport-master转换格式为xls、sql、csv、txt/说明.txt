@@ -1,0 +1,1 @@
+jQuery-tableExport是一款可以将普通HTML表格内容导出为CSV、XLS、TXT或SQL格式的jQuery插件。
