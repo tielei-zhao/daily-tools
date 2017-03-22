@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Clouds</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/waves.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <!--[if lt IE 10]>
+    <link type="text/css" href="css/IE8.css" rel="stylesheet" media="all"/>
+    <![endif]-->
+    <!--[if IE]>
+    <style>
+        .checkbox {
+            margin: 0 5px 0 42px;
+        }
+    </style>
+    <![endif]-->
+</head>
+<body>
+<div class="login">
+    <img class="logo" src="images/logo.png" alt="祖龙娱乐">
+
+    <div class="login_box">
+        <img class="explain" src="images/w.png" alt="说明">
+        <img class="oasingal" src="images/oa.png">
+
+        <div class="tips">如遇登陆困难或更多建议可以发送邮件至: xxx@zulong.com或者RTX联系: xxx</div>
+        <div class="login_input">
+            <input type="text" name="username" id="user" placeholder="账号">
+
+            <div class="login_icon user"></div>
+        </div>
+        <div class="login_input">
+            <input type="text" name="password" id="password" placeholder="密码">
+
+            <div class="login_icon pswd"></div>
+        </div>
+
+        <div class="clear_fix">
+            <input type="checkbox" class="checkbox">
+
+            <div class="checkbox_ex">记住密码</div>
+        </div>
+
+        <div>
+            <a href="#" class="sign_in btn btn-primary lang-markup waves-effect">登录</a>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/ThreeWebGL.js"></script>
+<script type="text/javascript" src="js/ThreeExtras.js"></script>
+<script type="text/javascript" src="js/Detector.js"></script>
+<script type="text/javascript" src="js/RequestAnimationFrame.js"></script>
+<!--[if !IE]><!-->
+<script type="text/javascript" src="js/waves.min.js"></script>
+<!--<![endif]-->
+<!--[if lt IE 10]>
+<script type="text/javascript" src="js/jquery.placeholder.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('input, textarea').placeholder();
+    });
+</script>
+<![endif]-->
+<script type="text/javascript">
+    if ((navigator.userAgent.indexOf('MSIE') >= 0) && (navigator.userAgent.indexOf('Opera') < 0)) {
+        $('body').css('background', 'url(images/bg-v.jpg) no-repeat 0 0');
+    }
+    //    $('.explain').on('mouseenter', function () {
+    //        $(".tips").fadeIn(500);
+    //    }).on('mouseleave', function () {
+    //        $(".tips").fadeOut(200);
+    //    })
+</script>
+
+<!--[if !IE]><!-->
+<script type="text/javascript">
+    Waves.displayEffect();
+</script>
+<!--<![endif]-->
+<script id="vs" type="x-shader/x-vertex">
+    varying vec2 vUv;
+    void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    }
+
+</script>
+<script id="fs" type="x-shader/x-fragment">
+			uniform sampler2D map;
+			uniform vec3 fogColor;
+			uniform float fogNear;
+			uniform float fogFar;
+			varying vec2 vUv;
+			void main() {
+				float depth = gl_FragCoord.z / gl_FragCoord.w;
+				float fogFactor = smoothstep( fogNear, fogFar, depth );
+				gl_FragColor = texture2D( map, vUv );
+				gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+			}
+
+</script>
+<script type="text/javascript">
+    if (!Detector.webgl) {
+        Detector.addGetWebGLMessage();
+    } else {
+        // Bg gradient
+        var canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = window.innerHeight;
+        var context = canvas.getContext('2d');
+        var gradient = context.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "#1e4877");
+        gradient.addColorStop(0.5, "#4584b4");
+        context.fillStyle = gradient;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        /*document.body.style.background = 'url(' + canvas.toDataURL('') + ')';*/
+        // Clouds
+        var container;
+        var camera, scene, renderer, sky, mesh, geometry, material,
+                i, h, color, colors = [], sprite, size, x, y, z;
+        var mouseX = 0, mouseY = 0;
+        var start_time = new Date().getTime();
+        var windowHalfX = window.innerWidth / 2;
+        var windowHalfY = window.innerHeight / 2;
+        init();
+        animate();
+    }
+
+    function init() {
+        //1.首先我们创建一个div，并将其加入到页面中。
+        container = document.createElement('div');
+        document.body.appendChild(container);
+        //2.定义相机。
+        camera = new THREE.Camera(30, window.innerWidth / window.innerHeight, 1, 3000);
+        camera.position.z = 6000;
+        //3.定义场景。
+        scene = new THREE.Scene();
+
+        geometry = new THREE.Geometry();
+        var texture = THREE.ImageUtils.loadTexture('images/cloud10.png');
+        texture.magFilter = THREE.LinearMipMapLinearFilter;
+        texture.minFilter = THREE.LinearMipMapLinearFilter;
+        var fog = new THREE.Fog(0xffffff, -100, 3000);
+        material = new THREE.MeshShaderMaterial({
+            uniforms: {
+                "map": {type: "t", value: 2, texture: texture},
+                "fogColor": {type: "c", value: fog.color},
+                "fogNear": {type: "f", value: fog.near},
+                "fogFar": {type: "f", value: fog.far},
+            },
+            vertexShader: document.getElementById('vs').textContent,
+            fragmentShader: document.getElementById('fs').textContent,
+            depthTest: false
+        });
+        var plane = new THREE.Mesh(new THREE.Plane(64, 64));
+        for (i = 0; i < 8000; i++) {
+            plane.position.x = Math.random() * 1000 - 500;
+            plane.position.y = -Math.random() * Math.random() * 200 - 15;
+            plane.position.z = i;
+            plane.rotation.z = Math.random() * Math.PI;
+            plane.scale.x = plane.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+            GeometryUtils.merge(geometry, plane);
+        }
+
+        mesh = new THREE.Mesh(geometry, material);
+        scene.addObject(mesh);
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.z = -8000;
+        scene.addObject(mesh);
+
+        //8.渲染场景。
+        renderer = new THREE.WebGLRenderer({antialias: false});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+        //document.addEventListener('mousemove', onDocumentMouseMove, false);
+        window.addEventListener('resize', onWindowResize, false);
+    }
+    //    function onDocumentMouseMove(event) {
+    //        mouseX = ( event.clientX - windowHalfX ) * 0.25;
+    //        mouseY = ( event.clientY - windowHalfY ) * 0.15;
+    //    }
+    function onWindowResize(event) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    function animate() {
+        requestAnimationFrame(animate);
+        render();
+    }
+    function render() {
+        position = ( ( new Date().getTime() - start_time ) * 0.03 ) % 8000;
+        camera.position.x += ( mouseX - camera.target.position.x ) * 0.01;
+        camera.position.y += ( -mouseY - camera.target.position.y ) * 0.01;
+        camera.position.z = -position + 8000;
+        camera.target.position.x = camera.position.x;
+        camera.target.position.y = camera.position.y;
+        camera.target.position.z = camera.position.z - 1000;
+        renderer.render(scene, camera);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>支持手机浏览的倒计时插件</title>
+    <style>
+        .end_times {
+            background-color: #FFF;
+            padding: 2rem 0 0
+        }
+
+        #note {
+            color: #ed145b;
+            font-size: 1.5rem;
+            letter-spacing: 0.1rem;
+            text-align: center;
+            position: relative;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="jquery.countdown.mobile.css"/>
+</head>
+<body>
+<div class='end_times'>
+    <div id="countdown"></div>
+    <p id="note"></p>
+</div>
+<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="jquery.countdown.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var note = $('#note');
+        var ts = (new Date("2017-01-01")).getTime();
+        $('#countdown').countdown({
+            timestamp: ts,
+            callback: function (days, hours, minutes, seconds) {
+
+                var message = "距离2017新年还有";
+
+                message += days + "天" + (days == 1 ? '' : '') + "";
+                message += hours + "小时" + (hours == 1 ? '' : '') + "";
+                message += minutes + "分" + (minutes == 1 ? '' : '') + "";
+                message += seconds + "秒" + (seconds == 1 ? '' : '') + "";
+                message += "...";
+                note.html(message);
+            }
+        });
+    });
+</script>
+</body>
+</html>

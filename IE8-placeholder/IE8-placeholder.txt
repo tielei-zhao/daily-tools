@@ -1,0 +1,15 @@
+<!--[if lt IE 10]>
+<link type="text/css" href="<%=baseStaticResourcePath%>css/IE8.css" rel="stylesheet" media="all" />
+<![endif]-->
+
+
+
+
+<!--[if lt IE 10]>
+<script type="text/javascript" src="<%=baseStaticResourcePath%>js/jquery.placeholder.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('input, textarea').placeholder();
+	});
+</script>
+<![endif]-->

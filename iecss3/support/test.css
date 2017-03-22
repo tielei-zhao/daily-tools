@@ -1,0 +1,21 @@
+.test {
+    width:300px;
+    height: 40px;
+    /*background-color: blue;*/
+    padding: 10px 8px 6px;
+    border: 2px solid #C0C0C0;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    behavior: url(ie-css3.htc);
+}
+
+.test2 {
+    width:300px;
+    height: 40px;
+    /*background-color: blue;*/
+    padding: 10px 8px 6px;
+    border: 2px solid #C0C0C0;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    /*behavior: url(ie-css3.htc);*/
+}
