@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .isUpload {
+            cursor: default;
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+<input type="button" value="Upload" id="upLoad">
+</body>
+<script src="jquery-2.0.3.min.js"></script>
+<script>
+    $('#upLoad').click(function () {
+        var countdownval = $(this).val();
+        CountDown($(this), countdownval);
+    });
+
+    function CountDown(_this, countdownval) {
+        var count = 3;
+        var countdown = setInterval(countDown, 1000);
+
+        function countDown() {
+            $(_this).attr("disabled", 'true').val(count).addClass('isUpload');
+            if (count == 0) {
+                $(_this).removeAttr("disabled").val(countdownval).removeClass('isUpload');
+                clearInterval(countdown);
+            }
+            count--;
+        }
+    }
+
+</script>
+</html>
