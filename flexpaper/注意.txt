@@ -1,0 +1,32 @@
+首先把word转为pdf
+再用swftool转换为swf，view是9
+a标签转入新的html
+新html中引入flexpaper
+js中加入
+
+
+var fp = $('#moreInfo').FlexPaperViewer(
+            {
+                config: {
+                    SwfFile: '../swf/a0-9.swf',
+                    Scale: 0.6,
+                    ZoomTransition: 'easeOut',
+                    ZoomTime: 0.5,
+                    ZoomInterval: 0.2,
+                    FitPageOnLoad: true,
+                    FitWidthOnLoad: true,
+                    FullScreenAsMaxWindow: true,
+                    ProgressiveLoading: true,
+                    MinZoomSize: 0.2,
+                    MaxZoomSize: 5,
+                    SearchMatchAll: false,
+                    InitViewMode: 'Portrait',
+                    ViewModeToolsVisible: true,
+                    ZoomToolsVisible: true,
+                    NavToolsVisible: true,
+                    CursorToolsVisible: true,
+                    SearchToolsVisible: true,
+                    localeChain: 'zh_CN'
+                }
+            }
+    );
